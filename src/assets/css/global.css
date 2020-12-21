@@ -9,3 +9,6 @@ html,body,#app{
 .el-table{
   margin-top: 10px;
 }
+.el-pagination{
+  margin-top: 15px;
+}
