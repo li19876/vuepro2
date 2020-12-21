@@ -15,8 +15,8 @@
         style="width: 100%; margin-bottom: 20px"
         row-key="id"
         border
-        default-expand-all
         :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+        ref="rightsTable"
       >
         <el-table-column prop="id" label="权限ID" sortable width="180">
         </el-table-column>
@@ -43,7 +43,23 @@ export default {
     async dataInit () {
       const { data: ret } = await this.$http.get('rights/' + 'tree')
       this.tableData = ret.data
-      console.log(ret)
+      // this.handleExpand()
+    },
+    // 设置树形结构默认折叠状态
+    handleExpand () {
+      // this.isExpand = !this.isExpand
+      this.$nextTick(() => {
+        this.forArr(this.tableData, this.isExpand)
+      })
+    },
+    forArr (arr, isExpand) {
+      arr.forEach(i => {
+        this.$refs.rightsTable.toggleRowExpansion(i, isExpand)
+
+        if (i.children) {
+          this.forArr(i.children, isExpand)
+        }
+      })
     }
   }
 }
