@@ -72,7 +72,7 @@ export default {
       const ret = await this.$http.get('menus')
       if (ret.data.meta.status !== 200) return this.$message.error(ret.data.meta.msg)
       this.menulist = ret.data.data
-      console.log(ret.data.data)
+      // console.log(ret.data.data)
     },
     togglecoll () {
       this.iscoll = !this.iscoll
