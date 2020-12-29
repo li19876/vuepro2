@@ -109,6 +109,38 @@
           <el-button type="primary" @click="editUserSub">确 定</el-button>
         </div>
       </el-dialog>
+
+      <!-- 分配角色对话框 -->
+      <el-dialog
+        title="分配角色"
+        :visible.sync="editRoleVisible"
+        center
+        @closed="roleDialogClosed"
+      >
+        <p>当前用户：{{ assignNow.user }}</p>
+        <p>当前角色：{{ assignNow.role }}</p>
+        <p>
+          当前分配新角色：<el-select
+            v-model="newrole"
+            filterable
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in rolelist"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </p>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="editRoleVisible = false">取 消</el-button>
+          <el-button type="primary" @click="editRoleSub(assignNow.id)"
+            >确 定</el-button
+          >
+        </div>
+      </el-dialog>
       <!-- 用户表格区域 -->
       <el-table :data="tableData" stripe style="width: 100%">
         <el-table-column type="index" :index="1" label="#" width="80">
@@ -151,13 +183,13 @@
               effect="dark"
               content="分配角色"
               placement="top"
-              :id="res.row.id"
               :enterable="false"
             >
               <el-button
                 type="warning"
                 icon="el-icon-setting"
                 size="small"
+                @click="assignRole(res.row)"
               ></el-button>
             </el-tooltip>
           </template>
@@ -223,6 +255,13 @@ export default {
         email: '',
         mobile: ''
       },
+      // 记录分配角色时当前用户和角色
+      assignNow: {
+        user: '',
+        id: '',
+        role: ''
+      },
+      editRoleVisible: false,
       userEditForm: {
         id: '',
         username: '',
@@ -244,10 +283,37 @@ export default {
         mobile: [
           { validator: checkMobile }
         ]
-      }
+      },
+      rolelist: [],
+      newrole: ''
     }
   },
   methods: {
+    // 打开分配角色弹窗
+    async assignRole (row) {
+      this.editRoleVisible = true
+      this.assignNow.user = row.username
+      this.assignNow.role = row.role_name
+      this.assignNow.id = row.id
+      const { data: ret } = await this.$http.get('roles')
+      this.rolelist = ret.data
+    },
+    // 分配角色弹窗关闭监听
+    roleDialogClosed () {
+      this.assignNow.user = ''
+      this.assignNow.role = ''
+      this.assignNow.id = ''
+      this.rolelist = []
+      this.newrole = ''
+    },
+    // 分配角色确定提交
+    async editRoleSub (id) {
+      const { data: ret } = await this.$http.put(`users/${id}/role`, { rid: this.newrole })
+      if (ret.meta.status !== 200) return this.$message.error('分配角色失败')
+      this.editRoleVisible = false
+      this.initdata()
+      return this.$message.success(ret.meta.msg)
+    },
     async editUser (id) {
       const { data: ret } = await this.$http.get(`users/${id}`)
       if (ret.meta.status === 200) {
