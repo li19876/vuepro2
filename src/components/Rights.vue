@@ -3,10 +3,8 @@
     <!-- 面包屑导航区域 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: '/' }">权限管理</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: '/rights' }"
-        >权限列表</el-breadcrumb-item
-      >
+      <el-breadcrumb-item>权限管理</el-breadcrumb-item>
+      <el-breadcrumb-item>权限列表</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 权限列表表格区域 -->
     <el-card>
@@ -22,8 +20,14 @@
         </el-table-column>
         <el-table-column prop="authName" label="权限说明" sortable width="180">
         </el-table-column>
-        <el-table-column prop="pid" label="权限父ID"> </el-table-column>
         <el-table-column prop="path" label="对应访问路径"> </el-table-column>
+        <el-table-column label="权限等级">
+          <template slot-scope="res">
+            <el-tag :type="leveltype(res.row.pid)">{{
+              leveltext(res.row.pid)
+            }}</el-tag>
+          </template>
+        </el-table-column>
       </el-table>
     </el-card>
   </div>
@@ -40,6 +44,28 @@ export default {
     this.dataInit()
   },
   methods: {
+    leveltype (id) {
+      if (!id) {
+        return 'danger'
+      }
+      if (id > 0) {
+        return ''
+      }
+      if (typeof id === 'string') {
+        return 'success'
+      }
+    },
+    leveltext (id) {
+      if (!id) {
+        return '一级'
+      }
+      if (id > 0) {
+        return '二级'
+      }
+      if (typeof id === 'string') {
+        return '三级'
+      }
+    },
     async dataInit () {
       const { data: ret } = await this.$http.get('rights/' + 'tree')
       this.tableData = ret.data

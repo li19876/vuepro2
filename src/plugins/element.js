@@ -28,10 +28,14 @@ import {
   Pagination,
   Tooltip,
   Dialog,
-  MessageBox
+  MessageBox,
+  Tag,
+  Tree
 } from 'element-ui'
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm
+Vue.use(Tree)
+Vue.use(Tag)
 Vue.use(Dialog)
 Vue.use(Tooltip)
 Vue.use(Pagination)
