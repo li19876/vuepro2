@@ -308,6 +308,7 @@ export default {
     },
     // 分配角色确定提交
     async editRoleSub (id) {
+      if (!this.newrole) return this.$message.error('请选择要分配的角色')
       const { data: ret } = await this.$http.put(`users/${id}/role`, { rid: this.newrole })
       if (ret.meta.status !== 200) return this.$message.error('分配角色失败')
       this.editRoleVisible = false
