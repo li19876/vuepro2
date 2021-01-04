@@ -25,7 +25,7 @@
             :key="item.id"
           >
             <template slot="title"
-              ><i :class="iconlist[item.id]"></i>
+              ><i :class="iconlist[item.id]"></i>&nbsp;&nbsp;&nbsp;
               <span>{{ item.authName }}</span></template
             >
             <el-menu-item
@@ -53,11 +53,11 @@ export default {
     return {
       menulist: [],
       iconlist: {
-        125: 'fa fa-group',
-        103: 'fa fa-cubes',
-        101: 'fa fa-shopping-bag',
-        102: 'fa fa-book',
-        145: 'fa fa-line-chart'
+        125: 'fas fa-user-friends',
+        103: 'fas fa-cubes',
+        101: 'fas fa-shopping-bag',
+        102: 'fas fa-book',
+        145: 'fas fa-chart-line'
       },
       iscoll: false,
       active: ''
