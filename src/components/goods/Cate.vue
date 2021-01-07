@@ -275,4 +275,7 @@ export default {
 .frownspan {
   color: rgb(233, 180, 36);
 }
+.el-cascader {
+  width: 100%;
+}
 </style>

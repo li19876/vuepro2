@@ -10,6 +10,17 @@ axios.interceptors.request.use(config => {
   config.headers.Authorization = window.sessionStorage.getItem('token')
   return config
 })
+// http响应拦截器
+axios.interceptors.response.use(res => {
+  if (res.data.meta && res.data.meta.status) {
+    const status = res.data.meta.status
+    // 10101是未登录状态码
+    if (status === 401) { // 如果是未登录直接踢出去
+      location.href = '/login'
+    }
+  }
+  return res
+})
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
