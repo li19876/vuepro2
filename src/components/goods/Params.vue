@@ -49,7 +49,9 @@
               ><template slot-scope="res">
                 <el-tag
                   :key="tag"
-                  v-for="tag in res.row.attr_vals.split(',')"
+                  v-for="tag in res.row.attr_vals
+                    ? res.row.attr_vals.split(',')
+                    : []"
                   closable
                   :disable-transitions="false"
                   @close="handleClose(tag, res.row)"
@@ -362,7 +364,9 @@ export default {
     },
 
     async handleInputConfirm (row) {
-      const inputValue = this.inputValue
+      const inputValue = this.inputValue.trim()
+      this.inputVisible = false
+      this.inputValue = ''
       if (inputValue) {
         const newtag = row.attr_vals ? row.attr_vals + ',' + inputValue : inputValue
         const { data: ret } = await this.$http.put(`categories/${this.cat_pid}/attributes/${row.attr_id}`, {
@@ -372,12 +376,8 @@ export default {
         })
         if (ret.meta.status !== 200) return this.$message.error('更新参数失败')
         row.attr_vals = newtag
-        this.inputVisible = false
-        this.inputValue = ''
         return this.$message.success('更新参数成功')
       }
-      this.inputVisible = false
-      this.inputValue = ''
     }
   },
   mounted () {
