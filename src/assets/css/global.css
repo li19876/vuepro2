@@ -10,7 +10,7 @@ html,body,#app{
 .el-table{
   margin-top: 15px;
   font-size: 12px;
-  color: #252525;
+  color: #5f6165;
 }
 .el-pagination{
   margin-top: 15px;
@@ -33,4 +33,14 @@ html,body,#app{
 }
 .el-cascader-panel .el-cascader-node__postfix {
   top: 10px;
+}
+.el-step__title {
+  font-size: 13px;
+}
+.ql-editor{
+  min-height: 300px;
+  
+}
+.ql-container{
+  margin-bottom: 15px!important;
 }
